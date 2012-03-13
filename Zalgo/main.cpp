@@ -31,12 +31,11 @@ int hex2dec(char c) {
 }
 
 void drukuj(list<int> lista) {
-	for(it = lista.begin(); it != lista.end(); ++it )
-		cout << hex << *it<<" ";
+	for(it1 = lista.begin(); it1 != lista.end(); it1++ )
+		cout << hex << *it1 <<" ";
 	
 	cout << endl;
 }
-
 
 void zamiana() {
 	/*
@@ -88,6 +87,29 @@ void zamiana() {
 
 }
 
+list <int> dodawanie(list <int> T1, list <int> T2) {
+	int x=0;
+
+	cout<<"Dodawanie..."<<endl;
+	list <int> wynik;
+
+
+	//1 przypadek
+	if(T1.size() == T2.size()) {
+		for(rit1 = T1.rbegin(), rit2 = T2.rbegin();
+			rit1 != T1.rend(), rit2 != T2.rend();
+			rit1++, rit2++) {
+				x = *rit1 + *rit2 + x;
+				wynik.push_front(x%10);
+				x = x/10;			
+		}
+		if(x!=0)
+			wynik.push_front(x%10);				
+	}
+
+	return wynik;
+}
+
 int main(int argc, char **argv) {
 	
 	cout << "Podaj I liczbe: ";
@@ -97,7 +119,7 @@ int main(int argc, char **argv) {
 	cin >> liczba2;
 
 	zamiana();
-	
+	drukuj(dodawanie(L1,L2));
 
 	system("pause");
 	return 0;
