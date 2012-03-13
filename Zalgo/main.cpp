@@ -107,6 +107,52 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 			wynik.push_front(x%10);				
 	}
 
+		//2 przypadek
+	if(T1.size() < T2.size()) {
+		rit1 = T1.rbegin();
+		rit2 = T2.rbegin();
+		
+		while( rit1 != T1.rend() ) {
+			x = *rit1 + *rit2 + x;
+			wynik.push_front(x%10);
+			x = x/10;			
+		
+			rit1++, rit2++;
+		}
+		
+		for(rit2; rit2 != T2.rend(); rit2++) {
+			x = *rit2 + x;
+			wynik.push_front(x%10);
+			x = x/10;								
+		}
+		if(x!=0)
+			wynik.push_front(x%10);				
+		
+	}
+	
+	//3 przypadek(analogicznie)
+	if(T1.size() > T2.size()) {
+		rit1 = T1.rbegin();
+		rit2 = T2.rbegin();
+				
+		while( rit2 != T2.rend() ) {
+			x = *rit1 + *rit2 + x;
+			wynik.push_front(x%10);
+			x = x/10;			
+		
+			rit1++, rit2++;
+		}
+		
+		for(rit1; rit1 != T1.rend(); rit1++) {
+			x = *rit1 + x;
+			wynik.push_front(x%10);
+			x = x/10;								
+		}
+		if(x!=0)
+			wynik.push_front(x%10);				
+		
+	}
+
 	return wynik;
 }
 
