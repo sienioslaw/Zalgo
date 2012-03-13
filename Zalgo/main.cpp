@@ -65,7 +65,25 @@ void zamiana() {
 	drukuj(L2);
 	*/
 
+	for(int i=0; i< liczba1.length(); i++) {
+		L1.push_back((int)liczba1[i]-48);
+	}
 
+	for(int i=0; i< liczba2.length(); i++) {
+		L2.push_back((int)liczba2[i]-48);
+	}
+	
+	for(it1 = L1.begin(); it1 != L1.end(); it1++ ) {
+		cout << *it1 << " ";
+
+	}
+	cout << endl;
+
+	for(it2 = L2.begin(); it2 != L2.end(); it2++ ) {
+		cout << *it2 << " ";
+
+	}
+	cout << endl;
 
 
 }
@@ -79,8 +97,7 @@ int main(int argc, char **argv) {
 	cin >> liczba2;
 
 	zamiana();
-	//dodawanie();
-
+	
 
 	system("pause");
 	return 0;
