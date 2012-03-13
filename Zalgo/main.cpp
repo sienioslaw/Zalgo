@@ -31,9 +31,11 @@ int hex2dec(char c) {
 }
 
 void drukuj(list<int> lista) {
-	for(it1 = lista.begin(); it1 != lista.end(); it1++ )
-		cout << hex << *it1 <<" ";
+	for(it1 = lista.begin(); it1 != lista.end(); it1++ ) {
+		//cout << hex << *it1 <<" ";
+		cout << *it1 <<" ";
 	
+	}
 	cout << endl;
 }
 
@@ -71,7 +73,7 @@ void zamiana() {
 	for(int i=0; i< liczba2.length(); i++) {
 		L2.push_back((int)liczba2[i]-48);
 	}
-	
+	/*
 	for(it1 = L1.begin(); it1 != L1.end(); it1++ ) {
 		cout << *it1 << " ";
 
@@ -83,14 +85,13 @@ void zamiana() {
 
 	}
 	cout << endl;
-
+	*/
 
 }
 
 list <int> dodawanie(list <int> T1, list <int> T2) {
 	int x=0;
 
-	cout<<"Dodawanie..."<<endl;
 	list <int> wynik;
 
 
@@ -156,16 +157,76 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 	return wynik;
 }
 
+list <int> mnozenie(list <int> T1, list <int> T2) {
+	int i=0, x=0;
+
+	list<list <int> > wiersze;
+	
+	for(rit1 = T1.rbegin(), i=0; rit1 != T1.rend(); rit1++, i++) {
+		//wiersze.push_back(list<int>());
+		list <int> tmp;
+		
+		for(rit2 = T2.rbegin(); rit2 != T2.rend(); rit2++) {
+			x = *rit1 * *rit2 + x;
+			tmp.push_front(x%10);
+			x = x/10;
+		}
+		if(x!=0)
+			tmp.push_front(x%10);
+		
+		x = 0;
+		
+		for(int j=0; j<i; j++)
+			tmp.push_back(0);
+		
+		//drukuj(tmp);		
+		
+		wiersze.push_back(tmp);
+		
+	}
+	
+	/*wydrukujmy wiersze! a co!
+	i=0;
+	for(list <list <int> >::iterator iter = wiersze.begin(); iter != wiersze.end(); i++, iter++) {
+			for(list <int>::iterator tip = iter->begin(); tip != iter->end(); tip++){
+				cout << *tip<< " ";
+				
+					
+			}
+			cout <<endl;
+	}
+	*/
+
+	list <int> pusty; 
+	
+	for(list <list <int> >::iterator iter = wiersze.begin(); iter != wiersze.end(); iter++) {	
+		pusty = dodawanie(pusty, *iter);		
+						
+	}
+	
+	return pusty;
+}
+
 int main(int argc, char **argv) {
 	
-	cout << "Podaj I liczbe: ";
-	cin >> liczba1;
+	char operacja;
 
-	cout << "Podaj II liczbe: ";
-	cin >> liczba2;
+	while(true) {
+		cin >> liczba1 >> operacja >> liczba2;
+		zamiana();
 
-	zamiana();
-	drukuj(dodawanie(L1,L2));
+		switch (operacja) {
+			case '+': drukuj(dodawanie(L1, L2)); break;
+		
+			case '*': drukuj(mnozenie(L1,L2)); break;
+
+			default:
+				break;
+		}
+
+		L1.clear();
+		L2.clear();
+	}
 
 	system("pause");
 	return 0;
