@@ -4,8 +4,10 @@
 using namespace std;
 
 //globalne
-list<int> L1, L2, wynik;
-list<int>::iterator it;
+list<int> L1, L2; //, wynik;
+list<int>::iterator it1, it2;
+list<int>::reverse_iterator rit1, rit2;
+
 string liczba1, liczba2;
 
 //odnosze wra¿enie ¿e moznalo te funkcje napisac ladniej...
@@ -37,6 +39,7 @@ void drukuj(list<int> lista) {
 
 
 void zamiana() {
+	/*
 	//chcemy stringi parzystej dlugosci!
 	if(!(liczba1.length() %2 == 0)) {
 		liczba1 = "0" + liczba1;
@@ -59,7 +62,12 @@ void zamiana() {
 		L1.push_back(hex2dec(liczba1[i])*16 + hex2dec(liczba1[i+1]));
 	}
 
-	drukuj(L2);	
+	drukuj(L2);
+	*/
+
+
+
+
 }
 
 int main(int argc, char **argv) {
