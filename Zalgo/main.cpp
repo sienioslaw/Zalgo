@@ -9,6 +9,8 @@ list<int>::iterator it1, it2;
 list<int>::reverse_iterator rit1, rit2;
 
 string liczba1, liczba2;
+bool znak = false;
+
 
 //odnosze wra¿enie ¿e moznalo te funkcje napisac ladniej...
 int hex2dec(char c) {
@@ -31,6 +33,9 @@ int hex2dec(char c) {
 }
 
 void drukuj(list<int> lista) {
+	if(znak)
+		cout<< "-";
+
 	for(it1 = lista.begin(); it1 != lista.end(); it1++ ) {
 		//cout << hex << *it1 <<" ";
 		cout << *it1 <<" ";
@@ -86,6 +91,30 @@ void zamiana() {
 	}
 	cout << endl;
 	*/
+
+}
+
+
+char porownanie(list<int> T1, list<int> T2) {
+	
+	if(T1.size() > T2.size() ) 
+		return '>';
+	else if(T1.size() < T2.size() ) 
+		return '<';
+	else {
+		//oba ciagi sa rowne...
+		for(it1 = T1.begin(), it2 = T2.begin(); 
+			it1!= T1.end(), it2 != T2.end(); 
+			it1++, it2++ ) {
+				if(*it1 < *it2)			
+					return '<';
+				
+				if(*it1 > *it2)			
+					return '>';
+		}
+		//przeszlismy obie listy -> rowne
+		return '=';
+	}
 
 }
 
@@ -210,11 +239,13 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 list <int> odejmowanie(list <int> T1, list <int> T2) { 
 	int x=0, carry=0;
 	list <int> wynik;
-
 	list<int>::reverse_iterator tip;
 
-	//cout<<"Odejmowanie..."<<endl;
-	
+	if(porownanie(T1, T2) == '<' ) {
+		znak = true;
+		return odejmowanie(T2, T1);
+	}
+
 	x = T1.size() - T2.size();
 
 	for(int i=0; i < x; i++)
@@ -271,30 +302,12 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 	for(int i=0; i < ile_zer; i++)
 		wynik.pop_front();
 
-	return wynik;
-}
 
-char porownanie(list<int> T1, list<int> T2) {
+	//wynik moze byc rowny 0
+	if(wynik.empty())
+		wynik.push_back(0);
 	
-	if(T1.size() > T2.size() ) 
-		return '>';
-	else if(T1.size() < T2.size() ) 
-		return '<';
-	else {
-		//oba ciagi sa rowne...
-		for(it1 = T1.begin(), it2 = T2.begin(); 
-			it1!= T1.end(), it2 != T2.end(); 
-			it1++, it2++ ) {
-				if(*it1 < *it2)			
-					return '<';
-				
-				if(*it1 > *it2)			
-					return '>';
-		}
-		//przeszlismy obie listy -> rowne
-		return '=';
-	}
-
+	return wynik;
 }
 
 int main(int argc, char **argv) {
@@ -318,6 +331,7 @@ int main(int argc, char **argv) {
 				break;
 		}
 
+		znak = false;
 		L1.clear();
 		L2.clear();
 	}
