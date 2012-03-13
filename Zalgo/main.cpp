@@ -214,7 +214,13 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 	list<int>::reverse_iterator tip;
 
 	//cout<<"Odejmowanie..."<<endl;
-	
+	if(T1.size > T2.size() ) {
+		x = T1.size() - T2.size();
+
+		for(int i=0; i < x; i++)
+			T2.push_front(0);
+	}
+
 	if(T1.size() == T2.size()) {
 		for(rit1 = T1.rbegin(), rit2 = T2.rbegin(); 
 			rit1!= T1.rend(), rit2 != T2.rend(); 
@@ -250,6 +256,7 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 		}
 
 	}
+
 	int ile_zer = 0;
 	//usuwamy zera na przedzie
 	for(it1 = wynik.begin(); it1 != wynik.end(); it1++) {
