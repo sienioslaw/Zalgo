@@ -214,12 +214,12 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 	list<int>::reverse_iterator tip;
 
 	//cout<<"Odejmowanie..."<<endl;
-	if(T1.size > T2.size() ) {
-		x = T1.size() - T2.size();
+	
+	x = T1.size() - T2.size();
 
-		for(int i=0; i < x; i++)
-			T2.push_front(0);
-	}
+	for(int i=0; i < x; i++)
+		T2.push_front(0);
+	
 
 	if(T1.size() == T2.size()) {
 		for(rit1 = T1.rbegin(), rit2 = T2.rbegin(); 
@@ -276,38 +276,25 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 
 char porownanie(list<int> T1, list<int> T2) {
 	
-	list <char> tmp;
-	list<char>::iterator tip;
-
-	if(T1.size() == T2.size()) {
+	if(T1.size() > T2.size() ) 
+		return '>';
+	else if(T1.size() < T2.size() ) 
+		return '<';
+	else {
+		//oba ciagi sa rowne...
 		for(it1 = T1.begin(), it2 = T2.begin(); 
 			it1!= T1.end(), it2 != T2.end(); 
 			it1++, it2++ ) {
-
-				if(*it1 == *it2)
-					tmp.push_back('=');
-				if(*it1 < *it2)
-					tmp.push_back('<');
-				if(*it1 > *it2)
-					tmp.push_back('>');
-
+				if(*it1 < *it2)			
+					return '<';
+				
+				if(*it1 > *it2)			
+					return '>';
 		}
+		//przeszlismy obie listy -> rowne
+		return '=';
 	}
 
-	//interpretacja wyniku...
-	while(tip != tmp.end() ) {
-		if(*tip == '=') 
-			tip++;
-
-		if(*tip == '<')
-			return '<';
-
-		if(*tip == '>')
-			return '>';
-
-		if(tip == tmp.end())
-			return '=';
-	}
 }
 
 int main(int argc, char **argv) {
@@ -325,8 +312,7 @@ int main(int argc, char **argv) {
 
 			case '-': drukuj(odejmowanie(L1, L2)); break;
 	
-			//nie dziala jeszcze...
-			//case '?': cout << porownanie(L1,L2) << endl; break;
+			case '?': cout << porownanie(L1,L2) << endl; break;
 
 			default:
 				break;
