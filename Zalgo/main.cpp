@@ -207,6 +207,102 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 	return pusty;
 }
 
+list <int> odejmowanie(list <int> T1, list <int> T2) { 
+	int x=0, carry=0;
+	list <int> wynik;
+
+	list<int>::reverse_iterator tip;
+
+	//cout<<"Odejmowanie..."<<endl;
+	
+	if(T1.size() == T2.size()) {
+		for(rit1 = T1.rbegin(), rit2 = T2.rbegin(); 
+			rit1!= T1.rend(), rit2 != T2.rend(); 
+			rit1++, rit2++ ) {
+				x = *rit1 - *rit2;
+
+				x = x%10;
+				if(x < 0) {
+					x+=10;
+					carry++;
+				}
+
+				if(carry > 0) {
+					int i=0;
+
+					//szukamy pozyczki
+					for(tip = rit1; tip != T1.rend(); tip++) {
+						if(*tip > 0 && i > 0) {
+							*tip = *tip -1;
+							break;
+						}
+						else
+						{
+							*tip = *tip -1;	
+						}
+						i++;
+					}
+				}
+
+				wynik.push_front(x);
+				carry=0;
+
+		}
+
+	}
+	int ile_zer = 0;
+	//usuwamy zera na przedzie
+	for(it1 = wynik.begin(); it1 != wynik.end(); it1++) {
+		if(*it1 == 0) {
+			ile_zer++;
+		}
+		else {
+			break;
+		}
+	}
+
+	for(int i=0; i < ile_zer; i++)
+		wynik.pop_front();
+
+	return wynik;
+}
+
+char porownanie(list<int> T1, list<int> T2) {
+	
+	list <char> tmp;
+	list<char>::iterator tip;
+
+	if(T1.size() == T2.size()) {
+		for(it1 = T1.begin(), it2 = T2.begin(); 
+			it1!= T1.end(), it2 != T2.end(); 
+			it1++, it2++ ) {
+
+				if(*it1 == *it2)
+					tmp.push_back('=');
+				if(*it1 < *it2)
+					tmp.push_back('<');
+				if(*it1 > *it2)
+					tmp.push_back('>');
+
+		}
+	}
+
+	//interpretacja wyniku...
+	while(tip != tmp.end() ) {
+		if(*tip == '=') 
+			tip++;
+
+		if(*tip == '<')
+			return '<';
+
+		if(*tip == '>')
+			return '>';
+
+		if(tip == tmp.end())
+			return '=';
+	}
+}
+
 int main(int argc, char **argv) {
 	
 	char operacja;
@@ -219,6 +315,11 @@ int main(int argc, char **argv) {
 			case '+': drukuj(dodawanie(L1, L2)); break;
 		
 			case '*': drukuj(mnozenie(L1,L2)); break;
+
+			case '-': drukuj(odejmowanie(L1, L2)); break;
+	
+			//nie dziala jeszcze...
+			//case '?': cout << porownanie(L1,L2) << endl; break;
 
 			default:
 				break;
