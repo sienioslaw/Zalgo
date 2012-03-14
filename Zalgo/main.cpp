@@ -94,7 +94,6 @@ void zamiana() {
 
 }
 
-
 char porownanie(list<int> T1, list<int> T2) {
 	
 	if(T1.size() > T2.size() ) 
@@ -245,7 +244,7 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 		znak = true;
 		return odejmowanie(T2, T1);
 	}
-
+	
 	x = T1.size() - T2.size();
 
 	for(int i=0; i < x; i++)
@@ -276,9 +275,11 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 						else
 						{
 							*tip = *tip -1;	
+							
 						}
 						i++;
 					}
+					//drukuj(wynik);
 				}
 
 				wynik.push_front(x);
@@ -336,6 +337,6 @@ int main(int argc, char **argv) {
 		L2.clear();
 	}
 
-	system("pause");
+	//system("pause");
 	return 0;
 }
