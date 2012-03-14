@@ -9,12 +9,12 @@
 using namespace std;
 
 //globalne
-list<int> L1, L2; //, wynik;
-list<int>::iterator it1, it2;
-list<int>::reverse_iterator rit1, rit2;
+extern list<int> L1, L2; //, wynik;
+extern list<int>::iterator it1, it2;
+extern list<int>::reverse_iterator rit1, rit2;
 
-string liczba1, liczba2;
-bool znak = false;
+extern string liczba1, liczba2;
+extern bool znak;
 
 int hex2dec(char);
 void drukuj(list<int>);

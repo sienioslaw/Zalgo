@@ -1,5 +1,12 @@
 #include "BigNumbers.h"
 
+//globalne
+extern list<int> L1, L2; //, wynik;
+extern list<int>::iterator it1, it2;
+extern list<int>::reverse_iterator rit1, rit2;
+
+extern string liczba1, liczba2;
+extern bool znak = false;
 
 //odnosze wra¿enie ¿e moznalo te funkcje napisac ladniej...
 int hex2dec(char c) {
@@ -34,7 +41,7 @@ void drukuj(list <int> lista) {
 }
 
 void zamiana() {
-	
+	/*
 	//chcemy stringi parzystej dlugosci!
 	if(!(liczba1.length() %2 == 0)) {
 		liczba1 = "0" + liczba1;
@@ -44,7 +51,8 @@ void zamiana() {
 		liczba2 = "0" + liczba2;		
 		cout << liczba2 <<endl;
 	}
-	
+	*/
+
 
 	//tworzymy listy ze stringow
 	for(int i=0; i < liczba1.length(); i=i+2) {
@@ -58,8 +66,8 @@ void zamiana() {
 	}
 
 	drukuj(L2);
+	
 	/*
-
 	for(int i=0; i< liczba1.length(); i++) {
 		L1.push_back((int)liczba1[i]-48);
 	}
@@ -67,7 +75,7 @@ void zamiana() {
 	for(int i=0; i< liczba2.length(); i++) {
 		L2.push_back((int)liczba2[i]-48);
 	}
-	/*
+	
 	for(it1 = L1.begin(); it1 != L1.end(); it1++ ) {
 		cout << *it1 << " ";
 
@@ -79,8 +87,8 @@ void zamiana() {
 
 	}
 	cout << endl;
+	
 	*/
-
 }
 
 char porownanie(list<int> T1, list<int> T2) {
