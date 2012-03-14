@@ -26,15 +26,15 @@ void drukuj(list <int> lista) {
 		cout<< "-";
 
 	for(it1 = lista.begin(); it1 != lista.end(); it1++ ) {
-		//cout << hex << *it1 <<" ";
-		cout << *it1 <<" ";
+		cout << hex << *it1 <<" ";
+		//cout << *it1 <<" ";
 	
 	}
 	cout << endl;
 }
 
 void zamiana() {
-	/*
+	
 	//chcemy stringi parzystej dlugosci!
 	if(!(liczba1.length() %2 == 0)) {
 		liczba1 = "0" + liczba1;
@@ -53,12 +53,12 @@ void zamiana() {
 
 	drukuj(L1);
 
-	for(int i=0; i < liczba1.length(); i=i+2) {
-		L1.push_back(hex2dec(liczba1[i])*16 + hex2dec(liczba1[i+1]));
+	for(int i=0; i < liczba2.length(); i=i+2) {
+		L2.push_back(hex2dec(liczba2[i])*16 + hex2dec(liczba2[i+1]));
 	}
 
 	drukuj(L2);
-	*/
+	/*
 
 	for(int i=0; i< liczba1.length(); i++) {
 		L1.push_back((int)liczba1[i]-48);
@@ -118,11 +118,11 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 			rit1 != T1.rend(), rit2 != T2.rend();
 			rit1++, rit2++) {
 				x = *rit1 + *rit2 + x;
-				wynik.push_front(x%10);
-				x = x/10;			
+				wynik.push_front(x%BAZA);
+				x = x/BAZA;			
 		}
 		if(x!=0)
-			wynik.push_front(x%10);				
+			wynik.push_front(x%BAZA);				
 	}
 
 		//2 przypadek
@@ -132,19 +132,19 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 		
 		while( rit1 != T1.rend() ) {
 			x = *rit1 + *rit2 + x;
-			wynik.push_front(x%10);
-			x = x/10;			
+			wynik.push_front(x%BAZA);
+			x = x/BAZA;			
 		
 			rit1++, rit2++;
 		}
 		
 		for(rit2; rit2 != T2.rend(); rit2++) {
 			x = *rit2 + x;
-			wynik.push_front(x%10);
-			x = x/10;								
+			wynik.push_front(x%BAZA);
+			x = x/BAZA;								
 		}
 		if(x!=0)
-			wynik.push_front(x%10);				
+			wynik.push_front(x%BAZA);				
 		
 	}
 	
@@ -155,19 +155,19 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 				
 		while( rit2 != T2.rend() ) {
 			x = *rit1 + *rit2 + x;
-			wynik.push_front(x%10);
-			x = x/10;			
+			wynik.push_front(x%BAZA);
+			x = x/BAZA;			
 		
 			rit1++, rit2++;
 		}
 		
 		for(rit1; rit1 != T1.rend(); rit1++) {
 			x = *rit1 + x;
-			wynik.push_front(x%10);
-			x = x/10;								
+			wynik.push_front(x%BAZA);
+			x = x/BAZA;								
 		}
 		if(x!=0)
-			wynik.push_front(x%10);				
+			wynik.push_front(x%BAZA);				
 		
 	}
 
@@ -185,11 +185,11 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 		
 		for(rit2 = T2.rbegin(); rit2 != T2.rend(); rit2++) {
 			x = *rit1 * *rit2 + x;
-			tmp.push_front(x%10);
-			x = x/10;
+			tmp.push_front(x%BAZA);
+			x = x/BAZA;
 		}
 		if(x!=0)
-			tmp.push_front(x%10);
+			tmp.push_front(x%BAZA);
 		
 		x = 0;
 		
@@ -246,9 +246,9 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 			rit1++, rit2++ ) {
 				x = *rit1 - *rit2;
 
-				x = x%10;
+				x = x%BAZA;
 				if(x < 0) {
-					x+=10;
+					x+=BAZA;
 					carry++;
 				}
 

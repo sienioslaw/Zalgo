@@ -1,6 +1,7 @@
 #ifndef BIGNUMBERS_H
 #define BIGNUMBERS_H
 
+#define BAZA 256
 #include <iostream>
 #include <list>
 #include <string>
