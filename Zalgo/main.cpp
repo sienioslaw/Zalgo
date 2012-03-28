@@ -1,7 +1,7 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include <sstream>
+
 #define BAZA 256
 
 using namespace std;
@@ -12,7 +12,10 @@ list<int>::iterator it1, it2;
 list<int>::reverse_iterator rit1, rit2;
 
 string liczba1, liczba2;
-bool znak = false;
+bool znak1 = false, znak2 = false, znak_wyniku =false;	//zakladamy ze wejsciowe stringi sa ujemne
+
+
+list <int> odejmowanie(list <int> T1, list <int> T2);
 
 //odnosze wra¿enie ¿e moznalo te funkcje napisac ladniej...
 int hex2dec(char c) {
@@ -23,11 +26,17 @@ int hex2dec(char c) {
 	else {
 		switch(c) {
 			case 'A': return 10;
+			case 'a': return 10;			
 			case 'B': return 11;
+			case 'b': return 11;
 			case 'C': return 12;
+			case 'c': return 12;
 			case 'D': return 13;
+			case 'd': return 13;
 			case 'E': return 14;
+			case 'e': return 14;
 			case 'F': return 15;
+			case 'f': return 15;
 
 			default: return -1;
 		}
@@ -35,69 +44,100 @@ int hex2dec(char c) {
 }
 
 void drukuj(list <int> lista) {
-	if(znak)
+	if(znak_wyniku)
 		cout<< "-";
 
 	for(it1 = lista.begin(); it1 != lista.end(); it1++ ) {
-		cout << hex << *it1 <<" ";
-		//cout << *it1 <<" ";
+		if(*it1 < 16)
+			cout << "0";
+		
+		cout << hex << *it1;
+		//cout << *it1;
 	
 	}
 	cout << endl;
 }
 
 void zamiana() {
-	/*
-	//chcemy stringi parzystej dlugosci!
+	
+	if(liczba1[0] == '-') {
+		znak1 = true;		//ujemny...
+		//cout<<"L1 ujemny\n";
+		liczba1.erase(0,1);
+	}
+		
+	if(liczba2[0] == '-') {
+		znak2 = true;		//ujemny...
+		//cout<<"L2 ujemny\n";
+		liczba2.erase(0,1);
+	}
+	
+	
+	
+	/*chcemy stringi parzystej dlugosci!
 	if(!(liczba1.length() %2 == 0)) {
 		liczba1 = "0" + liczba1;
-		cout << liczba1 <<endl;
+		//cout << liczba1 <<endl;
 	}
 	if(!(liczba2.length() %2 == 0)) {
 		liczba2 = "0" + liczba2;		
-		cout << liczba2 <<endl;
-	}
-	*/
-
-
+		//cout << liczba2 <<endl;
+	}*/
+		
+	
 	//tworzymy listy ze stringow
-	for(int i=0; i < liczba1.length(); i=i+2) {
-		L1.push_back(hex2dec(liczba1[i])*16 + hex2dec(liczba1[i+1]));
+	for(unsigned int i=0; i < liczba1.length(); i=i+2) {
+		L1.push_back(hex2dec(liczba1[i])*16 + 
+		hex2dec(liczba1[i+1]));
 	}
 
 	//drukuj(L1);
 
-	for(int i=0; i < liczba2.length(); i=i+2) {
-		L2.push_back(hex2dec(liczba2[i])*16 + hex2dec(liczba2[i+1]));
+	for(unsigned int i=0; i < liczba2.length(); i=i+2) {
+		L2.push_back(hex2dec(liczba2[i])*16 + 
+		hex2dec(liczba2[i+1]));
 	}
 
 	//drukuj(L2);
 	
-	/*
-	for(int i=0; i< liczba1.length(); i++) {
-		L1.push_back((int)liczba1[i]-48);
-	}
-
-	for(int i=0; i< liczba2.length(); i++) {
-		L2.push_back((int)liczba2[i]-48);
-	}
-	
-	for(it1 = L1.begin(); it1 != L1.end(); it1++ ) {
-		cout << *it1 << " ";
-
-	}
-	cout << endl;
-
-	for(it2 = L2.begin(); it2 != L2.end(); it2++ ) {
-		cout << *it2 << " ";
-
-	}
-	cout << endl;
-	
-	*/
 }
 
 char porownanie(list<int> T1, list<int> T2) {
+	
+	//najpierw porownanie znakow...
+	if(znak1 == true && znak2 == false) {
+		return '<';
+	}
+	if(znak1 == false && znak2 == true) {
+		return '>';
+	}
+	if(znak1 == true && znak2 == true) {
+		//oba ciagi ujemne
+		
+	
+	if(T1.size() > T2.size() ) 
+		return '<';
+	else if(T1.size() < T2.size() ) 
+		return '>';
+	else {
+			
+		for(it1 = T1.begin(), it2 = T2.begin(); 
+			it1!= T1.end(), it2 != T2.end(); 
+			it1++, it2++ ) {
+				if(*it1 < *it2)			
+					return '>';
+				
+				if(*it1 > *it2)			
+					return '<';
+		}
+		}
+		//przeszlismy obie listy -> rowne
+		return '=';
+	}
+	
+	
+	
+	
 	
 	if(T1.size() > T2.size() ) 
 		return '>';
@@ -122,10 +162,18 @@ char porownanie(list<int> T1, list<int> T2) {
 
 list <int> dodawanie(list <int> T1, list <int> T2) {
 	int x=0;
-
 	list <int> wynik;
 
-
+	if(znak1 && znak2) {
+		znak_wyniku = true;
+		//a dalej normalne dodawanie
+	}
+	
+	if(znak2) {
+		znak2 = false;
+		return odejmowanie(T1, T2);
+	}
+	
 	//1 przypadek
 	if(T1.size() == T2.size()) {
 		for(rit1 = T1.rbegin(), rit2 = T2.rbegin();
@@ -152,7 +200,7 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 			rit1++, rit2++;
 		}
 		
-		for(rit2; rit2 != T2.rend(); rit2++) {
+		for(; rit2 != T2.rend(); rit2++) {
 			x = *rit2 + x;
 			wynik.push_front(x%BAZA);
 			x = x/BAZA;								
@@ -175,7 +223,7 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 			rit1++, rit2++;
 		}
 		
-		for(rit1; rit1 != T1.rend(); rit1++) {
+		for(; rit1 != T1.rend(); rit1++) {
 			x = *rit1 + x;
 			wynik.push_front(x%BAZA);
 			x = x/BAZA;								
@@ -190,6 +238,11 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 
 list <int> mnozenie(list <int> T1, list <int> T2) {
 	int i=0, x=0;
+
+	if(znak1 || znak2) {
+		znak_wyniku= true;
+	}
+
 
 	list<list <int> > wiersze;
 	
@@ -218,8 +271,10 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 	
 	/*wydrukujmy wiersze! a co!
 	i=0;
-	for(list <list <int> >::iterator iter = wiersze.begin(); iter != wiersze.end(); i++, iter++) {
-			for(list <int>::iterator tip = iter->begin(); tip != iter->end(); tip++){
+	for(list <list <int> >::iterator iter = wiersze.begin(); iter != 
+wiersze.end(); i++, iter++) {
+			for(list <int>::iterator tip = iter->begin(); 
+tip != iter->end(); tip++){
 				cout << *tip<< " ";
 				
 					
@@ -230,7 +285,8 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 
 	list <int> pusty; 
 	
-	for(list <list <int> >::iterator iter = wiersze.begin(); iter != wiersze.end(); iter++) {	
+	for(list <list <int> >::iterator iter = wiersze.begin(); iter != 
+wiersze.end(); iter++) {	
 		pusty = dodawanie(pusty, *iter);		
 						
 	}
@@ -242,6 +298,26 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 	int x=0, carry=0;
 	list <int> wynik;
 	list<int>::reverse_iterator tip;
+	
+	if(znak2 == true && znak1 == false) {
+		znak2=false;
+		znak1 = false;
+		return dodawanie(T1,T2);
+	
+	}
+	
+	if(znak1 == true) {
+		znak_wyniku = true;
+		znak1 = false;
+		znak2 = false;
+		return dodawanie(T1, T2);
+	}
+	
+	if(porownanie(T1, T2) == '<') {
+		znak_wyniku = true;
+		return odejmowanie(T2,T1);
+		
+	}
 	
 	x = T1.size() - T2.size();
 
@@ -296,7 +372,7 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 
 list <int> dzielenie(list <int> T1, list <int> T2) {
 	list <int> wynik;
-	int x;
+	int i =0, x =0;
 	list <int> nowy;
 	list <int> tmp1, tmp2;
 
@@ -304,49 +380,27 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 	it2 = T2.begin();
 
 	while (it1 != T1.end()) {
-		//tworzymy tymczasowa liste...
 		
+		//naiwne...ile razy sie zmieœci?
+		while(*it1 > 0) {
+			*it1 -= *it2;
+			i++;
 		
-		x = *it1 / *it2;
-
-		if(x > 0) {
-			//ok fajnie zmiescilo sie cokolwiek
-			//dopisujemy do wyniku
-			wynik.push_back(x);
-			
-			tmp1.push_back(*it1);
-			tmp2.push_back(x * *it2);
-			
-			
-			//odejmowanie...
-			nowy = odejmowanie(tmp1, tmp2);
-
-			
-			
-			tmp1.clear();
-			tmp2.clear();
-			//drukuj(nowy);
-			//nowy.clear();
-
-		} else {
-			//nie zmiescilo sie, bierzemy pod uwage nastepne pozycje T1...
-
-
 		}
-
+		nowy.push_back(i);
+		i = x = 0;
+		
 		it1++;
 	}
 
-	cout<<endl;
-
+	drukuj(nowy);
+	
 	return wynik;
 }
 
 
 int main(int argc, char **argv) {
 	char operacja;
-
-	//while(true) {
 		cin >> liczba1 >> operacja >> liczba2;
 		zamiana();
 
@@ -356,21 +410,20 @@ int main(int argc, char **argv) {
 			case '*': drukuj(mnozenie(L1,L2)); break;
 
 			case '-': drukuj(odejmowanie(L1, L2)); break;
-	
-			case '/': drukuj(dzielenie(L1, L2)); break;
-	
 
-			case '?': cout << porownanie(L1,L2) << endl; break;
+			case '/': drukuj(dzielenie(L1, L2)); break;
+
+			
+			case '?': cout << porownanie(L1,L2) << endl; 
+		break;
 
 			default:
 				break;
 		}
 
-		znak = false;
+		//znak = false;
 		L1.clear();
 		L2.clear();
-	//}
 
-	//system("pause");
 	return 0;
 }
