@@ -3,7 +3,6 @@
 #include <string>
 
 #define BAZA 256
-
 using namespace std;
 
 //globalne
@@ -48,7 +47,7 @@ void drukuj(list <int> lista) {
 		cout<< "-";
 
 	for(it1 = lista.begin(); it1 != lista.end(); it1++ ) {
-		if(*it1 < 16)
+		if(*it1 < 16 && it1 != lista.begin())
 			cout << "0";
 		
 		cout << hex << *it1;
@@ -172,6 +171,23 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 	if(znak2) {
 		znak2 = false;
 		return odejmowanie(T1, T2);
+	}
+
+	if(znak1 && !znak2) {
+		znak1 = false;
+		znak2 = false;
+		
+		if(porownanie(T1,T2) == '>') {
+			znak_wyniku = true;
+			return odejmowanie(T1, T2);
+	
+		}
+		
+		if(porownanie(T1,T2) == '<') {
+			//znak_wyniku = true;
+			return odejmowanie(T2, T1);
+	
+		}
 	}
 	
 	//1 przypadek
@@ -299,25 +315,36 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 	list <int> wynik;
 	list<int>::reverse_iterator tip;
 	
-	if(znak2 == true && znak1 == false) {
-		znak2=false;
+	if(!znak1 && znak2) {
+		znak2 = false;
 		znak1 = false;
 		return dodawanie(T1,T2);
 	
 	}
 	
-	if(znak1 == true) {
+	//pierwszy ujemny, drugi dodatni
+	if(znak1 && !znak2) {
+		znak1 = znak2= false;
+		
 		znak_wyniku = true;
-		znak1 = false;
-		znak2 = false;
 		return dodawanie(T1, T2);
 	}
 	
-	if(porownanie(T1, T2) == '<') {
+	//oba ujemne
+	if(znak1 && znak2) {
+		//if(porownanie(T1, T2) == '<') {
+			znak2 =  false;
+			return dodawanie(T1,T2);
+		//}
+	
+	}
+	
+	//szybkie sprawdzenie
+	if(porownanie(T1,T2) == '<') {
 		znak_wyniku = true;
 		return odejmowanie(T2,T1);
-		
 	}
+	
 	
 	x = T1.size() - T2.size();
 
@@ -379,21 +406,11 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 	it1 = T1.begin();
 	it2 = T2.begin();
 
-	while (it1 != T1.end()) {
-		
-		//naiwne...ile razy sie zmieœci?
-		while(*it1 > 0) {
-			*it1 -= *it2;
-			i++;
-		
-		}
-		nowy.push_back(i);
-		i = x = 0;
-		
-		it1++;
-	}
-
-	drukuj(nowy);
+	
+	
+	
+	if(!nowy.empty()) 
+		drukuj(nowy);
 	
 	return wynik;
 }
