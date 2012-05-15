@@ -199,7 +199,56 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 		}
 	}
 	
+		//liczby wymierne
+	if(poz1!=0 || poz2!=0) {
+		//oba maja znak
+		list<int> ax, ay, bx, by;
+		int i = 0;
 
+		if(poz1 !=0) {
+			for(it1=T1.begin(), i = 1 ; it1 != T1.end(); it1++) {
+				if(i <= poz1) {
+					ax.push_back(*it1);
+				}
+				if(i > poz1) {
+					ay.push_back(*it1);
+				}
+
+				i++;
+			}
+		} else{
+			for(it1=T1.begin(); it1 != T1.end(); it1++) {
+				ax.push_back(*it1);
+			}
+			ay.push_back(1);
+		}
+
+		if(poz2 != 0) {
+			for(it1=T2.begin(), i = 1 ; it1 != T2.end(); it1++) {
+				if(i <= poz2) {
+					bx.push_back(*it1);
+				}
+				if(i > poz2) {
+					by.push_back(*it1);
+				}
+
+				i++;
+			}
+		} else{
+			for(it1=T2.begin(); it1 != T2.end(); it1++) {
+				bx.push_back(*it1);
+			}
+			by.push_back(1);
+		}
+		poz1 = poz2 = 0;
+	
+		ax = mnozenie(ax, by);
+		bx = mnozenie(bx, ay);
+
+
+		return dzielenie(dodawanie(ax, bx), mnozenie(ay, by));
+	
+	}
 
 	//1 przypadek
 	if(T1.size() == T2.size()) {
