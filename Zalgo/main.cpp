@@ -9,12 +9,14 @@ using namespace std;
 list<int> L1, L2; //, wynik;
 list<int>::iterator it1, it2;
 list<int>::reverse_iterator rit1, rit2;
+int poz1 = 0, poz2 = 0;
 
 string liczba1, liczba2;
 bool znak1 = false, znak2 = false, znak_wyniku =false;	//zakladamy ze wejsciowe stringi sa ujemne
 
-
 list <int> odejmowanie(list <int> T1, list <int> T2);
+list <int> dzielenie(list <int> T1, list <int> T2);
+list <int> mnozenie(list <int> T1, list <int> T2);
 
 //odnosze wra¿enie ¿e moznalo te funkcje napisac ladniej...
 int hex2dec(char c) {
@@ -71,18 +73,25 @@ void zamiana() {
 		liczba2.erase(0,1);
 	}
 	
-	
-	
-	/*chcemy stringi parzystej dlugosci!
-	if(!(liczba1.length() %2 == 0)) {
-		liczba1 = "0" + liczba1;
-		//cout << liczba1 <<endl;
+	//szukamy znakow
+	for(unsigned int i=0; i< liczba1.length(); i++) {
+		if(liczba1[i] == '_') { 
+			poz1 = i;
+			liczba1.erase(i,1);
+			break;
+		}
 	}
-	if(!(liczba2.length() %2 == 0)) {
-		liczba2 = "0" + liczba2;		
-		//cout << liczba2 <<endl;
-	}*/
-		
+	for(unsigned int i=0; i< liczba2.length(); i++) {
+		if(liczba2[i] == '_') { 
+			poz2 = i;
+			liczba2.erase(i,1);
+			break;
+		}
+	}
+	
+	poz1 = poz1/2;
+	poz2 = poz2/2;
+			
 	
 	//tworzymy listy ze stringow
 	for(unsigned int i=0; i < liczba1.length(); i=i+2) {
@@ -190,6 +199,8 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 		}
 	}
 	
+
+
 	//1 przypadek
 	if(T1.size() == T2.size()) {
 		for(rit1 = T1.rbegin(), rit2 = T2.rbegin();
@@ -258,6 +269,7 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 	if(znak1 || znak2) {
 		znak_wyniku= true;
 	}
+
 
 
 	list<list <int> > wiersze;
@@ -399,22 +411,51 @@ list <int> odejmowanie(list <int> T1, list <int> T2) {
 
 list <int> dzielenie(list <int> T1, list <int> T2) {
 	list <int> wynik;
-	int i =0, x =0;
-	list <int> nowy;
-	list <int> tmp1, tmp2;
+	list<int> i;
+	list <int> offset;
+	list <int> jeden;
 
-	it1 = T1.begin();
-	it2 = T2.begin();
 
+	i.push_back(1);
+	offset.push_back(0);
+	jeden.push_back(1);
+	wynik.push_back(0);
+
+	while(1) {
+					
+			//* l + T2 <= T1 && wynik * T2 <= T1
+			if((porownanie(dodawanie(offset, T2), T1) == '<' || (porownanie(dodawanie(offset, T2), T1) == '=')) && 
+			(porownanie(mnozenie(wynik, T2), T1) == '<' || porownanie(mnozenie(wynik, T2), T1) == '=' )) {
+
+				// ((i+i) * T2) + l > T1
+				if(porownanie(dodawanie(mnozenie(dodawanie(i, i), T2), offset), T1) == '>'  ) {
+					// ((i*T2) + l)
+					offset = dodawanie(mnozenie(i, T2), offset);
+						
+					wynik = dodawanie(wynik, i); 
+					i = jeden;
+
+					} else {
+						i = dodawanie(i, i);
+					}
+
+				} else {
+					break;
+				}
 	
-	
-	
-	if(!nowy.empty()) 
-		drukuj(nowy);
-	
+		
+	}
+
+	return wynik;
+}	
+
+list <int> modulo(list <int> T1, list <int> T2) {
+	list <int> wynik;
+
+	wynik = odejmowanie(T1, mnozenie(T2, dzielenie(T1, T2)) );
+
 	return wynik;
 }
-
 
 int main(int argc, char **argv) {
 	char operacja;
@@ -430,9 +471,9 @@ int main(int argc, char **argv) {
 
 			case '/': drukuj(dzielenie(L1, L2)); break;
 
-			
-			case '?': cout << porownanie(L1,L2) << endl; 
-		break;
+			case '%': drukuj(modulo(L1, L2)); break;
+
+			case '?': cout << porownanie(L1,L2) << endl; break;
 
 			default:
 				break;
