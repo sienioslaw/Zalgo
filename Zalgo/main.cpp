@@ -270,6 +270,58 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 		znak_wyniku= true;
 	}
 
+	//liczby wymierne
+	if(poz1!=0 || poz2!=0) {
+		//oba maja znak
+		list<int> ax, ay, bx, by;
+		int i = 0;
+
+		if(poz1 !=0) {
+			for(it1=T1.begin(), i = 1 ; it1 != T1.end(); it1++) {
+				if(i <= poz1) {
+					ax.push_back(*it1);
+				}
+				if(i > poz1) {
+					ay.push_back(*it1);
+				}
+
+				i++;
+			}
+		} else{
+			for(it1=T1.begin(); it1 != T1.end(); it1++) {
+				ax.push_back(*it1);
+			}
+			ay.push_back(1);
+		}
+
+		if(poz2 != 0) {
+			for(it1=T2.begin(), i = 1 ; it1 != T2.end(); it1++) {
+				if(i <= poz2) {
+					bx.push_back(*it1);
+				}
+				if(i > poz2) {
+					by.push_back(*it1);
+				}
+
+				i++;
+			}
+		} else{
+			for(it1=T2.begin(); it1 != T2.end(); it1++) {
+				bx.push_back(*it1);
+			}
+			by.push_back(1);
+		}
+		poz1 = poz2 = 0;
+
+		ax = mnozenie(ax, bx);
+		//drukuj(ax);
+		ay = mnozenie(ay, by);
+		//drukuj(ay);
+
+
+		return dzielenie(ax, ay);
+
+	}
 
 
 	list<list <int> > wiersze;
@@ -473,13 +525,12 @@ int main(int argc, char **argv) {
 
 			case '%': drukuj(modulo(L1, L2)); break;
 
-			case '?': cout << porownanie(L1,L2) << endl; break;
+			case '?': cout << porownanie(L1,L2); break;
 
 			default:
 				break;
 		}
 
-		//znak = false;
 		L1.clear();
 		L2.clear();
 
