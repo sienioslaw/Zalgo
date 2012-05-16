@@ -9,7 +9,7 @@ using namespace std;
 list<int> L1, L2; //, wynik;
 list<int>::iterator it1, it2;
 list<int>::reverse_iterator rit1, rit2;
-int poz1 = 0, poz2 = 0;
+int poz1 = 0, poz2 = 0, pozw=0;
 
 string liczba1, liczba2;
 bool znak1 = false, znak2 = false, znak_wyniku =false;	//zakladamy ze wejsciowe stringi sa ujemne
@@ -17,6 +17,7 @@ bool znak1 = false, znak2 = false, znak_wyniku =false;	//zakladamy ze wejsciowe 
 list <int> odejmowanie(list <int> T1, list <int> T2);
 list <int> dzielenie(list <int> T1, list <int> T2);
 list <int> mnozenie(list <int> T1, list <int> T2);
+list <int> GCD(list <int> T1, list <int> T2);
 
 //odnosze wra¿enie ¿e moznalo te funkcje napisac ladniej...
 int hex2dec(char c) {
@@ -47,14 +48,18 @@ int hex2dec(char c) {
 void drukuj(list <int> lista) {
 	if(znak_wyniku)
 		cout<< "-";
-
+	int i=0;
 	for(it1 = lista.begin(); it1 != lista.end(); it1++ ) {
+		if(pozw != 0 && i==pozw){
+			cout<<"_";
+		}
+
 		if(*it1 < 16 && it1 != lista.begin())
 			cout << "0";
 		
 		cout << hex << *it1;
 		//cout << *it1;
-	
+		i++;
 	}
 	cout << endl;
 }
@@ -244,7 +249,30 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 	
 		ax = mnozenie(ax, by);
 		bx = mnozenie(bx, ay);
+		
+		ax = dodawanie(ax, bx);
+		ay = mnozenie(ay, by);
+		
+		cout<<"gcd: ";
+		list <int> gcd = (GCD(ax, ay));	
+		
+		//drukuj(gcd);
+		cout <<endl;
 
+		ax = dzielenie(ax, gcd); 
+		ay = dzielenie(ay, gcd);
+
+		pozw = ax.size();
+
+		wynik.merge(ax);
+		it1 = wynik.end();
+		wynik.splice(it1, ay);
+
+			return wynik;
+		//}
+		
+		drukuj(ax);
+		drukuj(bx);
 
 		return dzielenie(dodawanie(ax, bx), mnozenie(ay, by));
 	
@@ -367,6 +395,22 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 		ay = mnozenie(ay, by);
 		//drukuj(ay);
 
+		cout<<"gcd: ";
+		list <int> gcd = (GCD(ax, ay));	
+		
+		//drukuj(gcd);
+		cout <<endl;
+
+		ax = dzielenie(ax, gcd); 
+		ay = dzielenie(ay, gcd);
+
+		pozw = ax.size();
+
+		//ax.merge(ax);
+		it1 = ax.end();
+		ax.splice(it1, ay);
+
+		return ax;
 
 		return dzielenie(ax, ay);
 
@@ -414,12 +458,12 @@ tip != iter->end(); tip++){
 
 	list <int> pusty; 
 	
-	for(list <list <int> >::iterator iter = wiersze.begin(); iter != 
-wiersze.end(); iter++) {	
+	for(list <list <int> >::iterator iter = wiersze.begin(); iter != wiersze.end(); iter++) {	
 		pusty = dodawanie(pusty, *iter);		
 						
 	}
 	
+	wiersze.clear();
 	return pusty;
 }
 
@@ -516,6 +560,9 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 	list <int> offset;
 	list <int> jeden;
 
+	if(znak1== true || znak2 == true) { 
+		znak_wyniku == true;
+	}
 
 	i.push_back(1);
 	offset.push_back(0);
@@ -558,11 +605,25 @@ list <int> modulo(list <int> T1, list <int> T2) {
 	return wynik;
 }
 
+
+
+
+
+list<int> GCD(list <int> a, list <int> b ) {
+list <int> zero;
+zero.push_back(0);
+	if(porownanie(b, zero) == '=') {
+		return a;
+	}
+
+	return GCD(b, modulo(a,b));
+}
+
 int main(int argc, char **argv) {
 	char operacja;
 		cin >> liczba1 >> operacja >> liczba2;
 		zamiana();
-
+		
 		switch (operacja) {
 			case '+': drukuj(dodawanie(L1, L2)); break;
 		
@@ -576,6 +637,7 @@ int main(int argc, char **argv) {
 
 			case '?': cout << porownanie(L1,L2); break;
 
+			case 'g': drukuj(GCD(L1, L2)); break;
 			default:
 				break;
 		}
