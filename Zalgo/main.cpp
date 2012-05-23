@@ -1,23 +1,8 @@
-#include <iostream>
-#include <list>
-#include <string>
+#include "Big.h"
 
-#define BAZA 256
-using namespace std;
-
-//globalne
-list<int> L1, L2; //, wynik;
-list<int>::iterator it1, it2;
-list<int>::reverse_iterator rit1, rit2;
 int poz1 = 0, poz2 = 0, pozw=0;
-
-string liczba1, liczba2;
 bool znak1 = false, znak2 = false, znak_wyniku =false;	//zakladamy ze wejsciowe stringi sa ujemne
 
-list <int> odejmowanie(list <int> T1, list <int> T2);
-list <int> dzielenie(list <int> T1, list <int> T2);
-list <int> mnozenie(list <int> T1, list <int> T2);
-list <int> GCD(list <int> T1, list <int> T2);
 
 //odnosze wra¿enie ¿e moznalo te funkcje napisac ladniej...
 int hex2dec(char c) {
@@ -177,7 +162,7 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 	int x=0;
 	list <int> wynik;
 
-	if(znak1 && znak2) {
+	if(znak1==true && znak2==true) {
 		znak_wyniku = true;
 		//a dalej normalne dodawanie
 	}
@@ -249,33 +234,52 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 	
 		ax = mnozenie(ax, by);
 		bx = mnozenie(bx, ay);
-		
+
+		//dodajemy mianownik
 		ax = dodawanie(ax, bx);
-		ay = mnozenie(ay, by);
+		//wynik.splice(wynik.begin(),ax);
 		
-		cout<<"gcd: ";
-		list <int> gcd = (GCD(ax, ay));	
+		//drukuj(wynik);
+		//dzielnik
+		by = mnozenie(by, ay);
+		//drukuj(by);
 		
-		//drukuj(gcd);
+
+		list <int> gcd;
+		//cout<<"gcd: ";
+		if(porownanie(ax, by) == '<') {
+			 gcd = (GCD(by, ax));	
+		} else {
+			 gcd = (GCD(ax, by));			
+		}
+		/*
+		drukuj(gcd);
 		cout <<endl;
 
-		ax = dzielenie(ax, gcd); 
-		ay = dzielenie(ay, gcd);
+		//skracamy
+		ax = dzielenie(ax, gcd);
+		by = dzielenie(by, gcd); 
 
-		pozw = ax.size();
-
-		wynik.merge(ax);
-		it1 = wynik.end();
-		wynik.splice(it1, ay);
-
-			return wynik;
-		//}
-		
+		cout<<"mianownik:";
 		drukuj(ax);
-		drukuj(bx);
+		cout<<endl;
 
-		return dzielenie(dodawanie(ax, bx), mnozenie(ay, by));
-	
+		cout<<"dzielnik:";
+		drukuj(by);
+		cout<<endl;
+		*/
+
+		//skracamy
+		ax = dzielenie(ax, gcd);
+		by = dzielenie(by, gcd); 
+
+				pozw = ax.size();
+
+		wynik.splice(wynik.end(), ax);
+		wynik.splice(wynik.end(), by);
+
+		return wynik;
+		
 	}
 
 	//1 przypadek
@@ -343,8 +347,8 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 list <int> mnozenie(list <int> T1, list <int> T2) {
 	int i=0, x=0;
 
-	if(znak1 || znak2) {
-		znak_wyniku= true;
+	if(znak1==true || znak2==true) {
+		//znak_wyniku= true;
 	}
 
 	//liczby wymierne
@@ -395,11 +399,11 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 		ay = mnozenie(ay, by);
 		//drukuj(ay);
 
-		cout<<"gcd: ";
+		//cout<<"gcd: ";
 		list <int> gcd = (GCD(ax, ay));	
 		
 		//drukuj(gcd);
-		cout <<endl;
+		//cout <<endl;
 
 		ax = dzielenie(ax, gcd); 
 		ay = dzielenie(ay, gcd);
@@ -412,7 +416,7 @@ list <int> mnozenie(list <int> T1, list <int> T2) {
 
 		return ax;
 
-		return dzielenie(ax, ay);
+		//return dzielenie(ax, ay);
 
 	}
 
@@ -560,10 +564,11 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 	list <int> offset;
 	list <int> jeden;
 
+		
 	if(znak1== true || znak2 == true) { 
-		znak_wyniku == true;
+		//znak_wyniku = true;
 	}
-
+	
 	i.push_back(1);
 	offset.push_back(0);
 	jeden.push_back(1);
@@ -599,15 +604,12 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 
 list <int> modulo(list <int> T1, list <int> T2) {
 	list <int> wynik;
-
+	
 	wynik = odejmowanie(T1, mnozenie(T2, dzielenie(T1, T2)) );
-
+	
+	//cout<<"znak "<< znak_wyniku<<endl;
 	return wynik;
 }
-
-
-
-
 
 list<int> GCD(list <int> a, list <int> b ) {
 list <int> zero;
@@ -619,7 +621,209 @@ zero.push_back(0);
 	return GCD(b, modulo(a,b));
 }
 
+list <int> min(list <list <int> > x) {
+	list <int> m;
+	m.push_back(0);
+	list <list <int> >::iterator iter = x.begin();
+
+	m = *iter;
+
+	for(iter; iter != x.end(); iter++) {
+		if(porownanie(m, *iter) == '>') {
+			m = *iter;
+		}
+	}
+
+	return m;
+}
+
+list <int> GCD2(list <list<int> > x) {
+	list <int> m;
+	
+	list <list <int> >::iterator iter = x.begin();
+
+	//usuwanie zer
+	while(iter != x.end() ) {
+		if(iter->size() == 1 && *iter->begin() == 0) {
+			//cout<< "mam dziada\n";
+			x.erase(iter++);
+		} else {
+			++iter;
+		}
+	}
+
+	iter = x.begin();
+
+	do {
+		m = min(x);
+		
+		for(iter = x.begin(); iter != x.end(); iter++) {
+			*iter = modulo(*iter, m);
+		}
+		iter = x.begin();
+
+		while(iter != x.end() ) {
+			if(iter->size() == 1 && *iter->begin() == 0) {
+				//cout<< "mam dziada\n";
+				x.erase(iter++);
+			} else {
+				++iter;
+			}
+		}
+		x.push_back(m);
+	} while(x.size() >= 2);
+	
+	return m;
+}
+
+list <int> prze_w_p(list<int> x) {
+	bool carry = false;
+	it1 = x.begin();
+
+	while(it1 != x.end()) {
+		if(carry)
+			*it1 +=256;
+
+		carry=false;
+		if((*it1 & 1) == 1) {
+			carry = true;
+		}
+		
+		*it1 = *it1 >> 1;
+
+
+		it1++;
+	}
+
+	if(x.front() == 0 && x.size() != 1) 
+		x.pop_front();
+
+	return x;
+}
+
+list <int> prze_w_l(list <int> x) {
+	bool carry = false;
+
+	rit1 = x.rbegin();
+	while(rit1 != x.rend()) {
+		*rit1 = *rit1 << 1;
+
+		if(carry)
+			*rit1 +=1;
+		carry = false;
+
+		if(*rit1 > 256) {
+			//x.push_front(*rit1/256);
+			*rit1 = *rit1 % 256;
+			*rit1 = *rit1 & 255;
+			carry = true;
+		}
+		//cout <<hex<<*rit1 << " ";
+
+		rit1++;
+	}
+	if(carry) {
+		x.push_front(1);
+	}
+
+
+	return x;
+}
+
+list <int> Stein(list <int> u, list <int> v) {
+	list <int> zero, dwa;
+	zero.push_back(0);
+	dwa.push_back(2);
+	
+	cout<<"U: ";
+	drukuj(u);
+
+	cout<<"V: ";
+	drukuj(v);
+	cout<<endl;
+	
+
+	if(porownanie(u, v) == '=') 
+		return u;
+	if(porownanie(u, zero) =='=')
+		return v;
+	if(porownanie(v, zero) =='=') 
+		return u;
+
+	//jezeli u jest parzyste to...
+	if(porownanie(modulo(u, dwa), zero) == '=') {
+		//cout<<"ha!\n";
+		if(!(porownanie(modulo(v, dwa), zero) == '=')){
+			return Stein(prze_w_p(u), v);
+		} else {
+			return prze_w_p( Stein(prze_w_p(u), prze_w_p(v)));
+		}	
+	}
+	if(porownanie(modulo(v, dwa), zero) == '=') {
+		return Stein(u, prze_w_p(v));
+	}
+
+
+	if(porownanie(u,v) == '>') {
+		return Stein(prze_w_p(odejmowanie(u,v)), v);
+	}
+	
+	return Stein(prze_w_p(odejmowanie(v,u)), u);
+	
+
+	//return wynik;
+}
+
+//brzydki kawa³ kodu
+void newtest() {
+	list <list <int> > x;
+	list <int> a, b, c;
+	int j;
+
+	srand(time(NULL));
+		
+	for(int i=0; i < 10; i++) {
+		
+		for(j=0; j < rand()%2+1; j++) {
+			a.push_back(rand() % 255); 
+		}
+		
+		for(j=0; j < rand()%2+1; j++) {
+			b.push_back(rand() % 255); 
+		}
+
+		for(j=0; j < rand()%2+1; j++) {
+			c.push_back(rand() % 255); 
+		}
+
+		x.push_back(a);
+		x.push_back(b);
+		x.push_back(c);
+
+		//test!
+		drukuj(a);
+		drukuj(b);
+		drukuj(c);
+
+		if(porownanie(GCD(GCD(a,b),c), GCD2(x)) == '=') {
+			cout<<"wynik = ";
+			drukuj(GCD2(x));
+			cout<< "Ok\n";
+		} else{ 
+			cout<<"OMG, error\n";
+		}
+
+		znak_wyniku=false;
+		x.clear();
+		a.clear(); b.clear(); c.clear();
+	}
+
+	cout<<"Koniec Testu....\n\n";
+
+}
+
 int main(int argc, char **argv) {
+	newtest();
 	char operacja;
 		cin >> liczba1 >> operacja >> liczba2;
 		zamiana();
@@ -638,6 +842,13 @@ int main(int argc, char **argv) {
 			case '?': cout << porownanie(L1,L2); break;
 
 			case 'g': drukuj(GCD(L1, L2)); break;
+
+			case 's': drukuj(Stein(L1,L2)); break;
+
+			case '>': drukuj(prze_w_p(L1)); break;
+
+			case '<': drukuj(prze_w_l(L1)); break;
+
 			default:
 				break;
 		}
