@@ -1,7 +1,7 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include <time.h>
+//#include <time.h>
 
 
 #define BAZA 256

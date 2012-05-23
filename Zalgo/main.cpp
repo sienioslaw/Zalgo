@@ -1,4 +1,6 @@
 #include "Big.h"
+#include <cstdlib>
+#include <time.h>
 
 int poz1 = 0, poz2 = 0, pozw=0;
 bool znak1 = false, znak2 = false, znak_wyniku =false;	//zakladamy ze wejsciowe stringi sa ujemne
@@ -612,8 +614,11 @@ list <int> modulo(list <int> T1, list <int> T2) {
 }
 
 list<int> GCD(list <int> a, list <int> b ) {
-list <int> zero;
-zero.push_back(0);
+	list <int> zero;
+	zero.push_back(0);
+
+	znak_wyniku = false;
+
 	if(porownanie(b, zero) == '=') {
 		return a;
 	}
@@ -808,9 +813,11 @@ void newtest() {
 		if(porownanie(GCD(GCD(a,b),c), GCD2(x)) == '=') {
 			cout<<"wynik = ";
 			drukuj(GCD2(x));
-			cout<< "Ok\n";
+			cout<< "Ok\n\n";
 		} else{ 
-			cout<<"OMG, error\n";
+			cout<<"OMG, error - debug: \n\n";
+			drukuj(GCD(GCD(a,b),c));
+			drukuj(GCD2(x));
 		}
 
 		znak_wyniku=false;

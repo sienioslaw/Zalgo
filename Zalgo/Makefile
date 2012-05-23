@@ -1,2 +1,2 @@
-hello: main.cpp
-	g++ main.cpp -o big -Wall -pedantic
+hello: main.cpp Big.h
+	g++ main.cpp Big.h -o big -Wall -pedantic
