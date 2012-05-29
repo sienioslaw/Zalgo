@@ -1,7 +1,6 @@
 #include "Big.h"
 #include <cstdlib>
 #include <time.h>
-
 int poz1 = 0, poz2 = 0, pozw=0;
 bool znak1 = false, znak2 = false, znak_wyniku =false;	//zakladamy ze wejsciowe stringi sa ujemne
 
@@ -349,10 +348,23 @@ list <int> dodawanie(list <int> T1, list <int> T2) {
 list <int> mnozenie(list <int> T1, list <int> T2) {
 	int i=0, x=0;
 
-	if(znak1==true || znak2==true) {
-		//znak_wyniku= true;
+	if(znak1==true && znak2==false) {
+		znak_wyniku= true;
 	}
-
+	if(znak1==false && znak2==true) {
+		znak_wyniku= true;
+	}
+	if(znak1 == true && znak2 == true) {
+		znak_wyniku = false;
+	}
+	/*
+	cout<< "znak 1: " <<znak1<<endl;
+	cout<< "znak 2: " <<znak2<<endl;
+	cout<< "znak w: " <<znak_wyniku<<endl;
+	*/
+	znak1 = znak2 = false;
+	
+	
 	//liczby wymierne
 	if(poz1!=0 || poz2!=0) {
 		//oba maja znak
@@ -566,10 +578,22 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 	list <int> offset;
 	list <int> jeden;
 
-		
-	if(znak1== true || znak2 == true) { 
-		//znak_wyniku = true;
+	if(znak1== true && znak2 == false) { 
+		znak_wyniku = true;
+		//znak1 = znak2 = false;
 	}
+	if(znak1== false && znak2 == true) { 
+		znak_wyniku = true;
+		znak1 = znak2 = false;
+	}	
+	if(znak1== true && znak2 == true) { 
+		znak_wyniku = false;
+		znak1 = znak2 = false;
+	}
+	
+	//znak1 = znak2 = false;
+	
+	
 	
 	i.push_back(1);
 	offset.push_back(0);
@@ -600,30 +624,58 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 	
 		
 	}
-
+	if(znak_wyniku==true) {
+		wynik =dodawanie(wynik, jeden);
+	}
+	
+	if(wynik.front() == 0 && wynik.size() == 1 && znak_wyniku==true) {
+		znak_wyniku=false;
+	}
+		
 	return wynik;
 }	
 
 list <int> modulo(list <int> T1, list <int> T2) {
 	list <int> wynik;
+	bool x;
+	if(znak1==true && znak2==false) {
+		x = false;
+			
+		wynik = odejmowanie(T1, mnozenie(T2, dzielenie(T1, T2)) );	
+		znak_wyniku = x;
+		return wynik;
 	
-	wynik = odejmowanie(T1, mnozenie(T2, dzielenie(T1, T2)) );
+	} else {
 	
+	wynik = odejmowanie(T1, mnozenie(T2, dzielenie(T1, T2)) );	
 	//cout<<"znak "<< znak_wyniku<<endl;
+
+	
 	return wynik;
+	}
 }
 
 list<int> GCD(list <int> a, list <int> b ) {
-	list <int> zero;
+	list <int> zero, t;
 	zero.push_back(0);
-
-	znak_wyniku = false;
-
+	
+	if(porownanie(a, b) == '<') {
+		return GCD(b,a);
+	}
+	/*
 	if(porownanie(b, zero) == '=') {
 		return a;
 	}
 
 	return GCD(b, modulo(a,b));
+	*/
+	while(porownanie(b, zero) != '=') {
+		t = b;
+		b = modulo(a, b);
+		a = t;
+	
+	}
+	return a;
 }
 
 list <int> min(list <list <int> > x) {
@@ -633,7 +685,7 @@ list <int> min(list <list <int> > x) {
 
 	m = *iter;
 
-	for(iter; iter != x.end(); iter++) {
+	for(; iter != x.end(); iter++) {
 		if(porownanie(m, *iter) == '>') {
 			m = *iter;
 		}
@@ -658,7 +710,7 @@ list <int> GCD2(list <list<int> > x) {
 	}
 
 	iter = x.begin();
-
+	
 	do {
 		m = min(x);
 		
@@ -677,6 +729,9 @@ list <int> GCD2(list <list<int> > x) {
 		}
 		x.push_back(m);
 	} while(x.size() >= 2);
+	
+	//cout<<"tutaj\n";
+	
 	
 	return m;
 }
@@ -809,28 +864,30 @@ void newtest() {
 		drukuj(a);
 		drukuj(b);
 		drukuj(c);
-
 		if(porownanie(GCD(GCD(a,b),c), GCD2(x)) == '=') {
 			cout<<"wynik = ";
 			drukuj(GCD2(x));
-			cout<< "Ok\n\n";
+			cout<< "Ok\n";
 		} else{ 
-			cout<<"OMG, error - debug: \n\n";
-			drukuj(GCD(GCD(a,b),c));
-			drukuj(GCD2(x));
+			cout<<"OMG, error\n";
 		}
-
+		
+		//drukuj(GCD(GCD(a,b),c));
+		//drukuj(GCD2(x));
+		
+		cout<< "\n";
+		
 		znak_wyniku=false;
 		x.clear();
 		a.clear(); b.clear(); c.clear();
 	}
 
-	cout<<"Koniec Testu....\n\n";
+	cout<<"Koniec Testu....\n";
 
 }
 
 int main(int argc, char **argv) {
-	newtest();
+	//newtest();
 	char operacja;
 		cin >> liczba1 >> operacja >> liczba2;
 		zamiana();
@@ -846,7 +903,7 @@ int main(int argc, char **argv) {
 
 			case '%': drukuj(modulo(L1, L2)); break;
 
-			case '?': cout << porownanie(L1,L2); break;
+			case '?': cout << porownanie(L1,L2)<<endl; break;
 
 			case 'g': drukuj(GCD(L1, L2)); break;
 
@@ -856,6 +913,9 @@ int main(int argc, char **argv) {
 
 			case '<': drukuj(prze_w_l(L1)); break;
 
+			case 't': for(int i=0; i<5; i++) 
+						{newtest();} break;
+			
 			default:
 				break;
 		}
