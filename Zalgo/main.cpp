@@ -638,6 +638,30 @@ list <int> dzielenie(list <int> T1, list <int> T2) {
 list <int> modulo(list <int> T1, list <int> T2) {
 	list <int> wynik;
 	bool x;
+
+	if(znak1==true && znak2== true) {
+		znak1 = znak2 = false;
+	}
+	
+	if(T1.size() < T2.size() && znak2==true && znak1==true) {
+		znak_wyniku = true;
+		return T2;
+		
+	}
+	
+	if(T1.size() > T2.size() && znak2==true && znak1==true) {
+		znak_wyniku = true;
+		return T1;
+		
+	}
+	
+	if(T1.size() < T2.size() && znak2==false && znak1==false) {
+		znak_wyniku = false;
+		return T1;
+		
+	}
+
+
 	if(znak1==true && znak2==false) {
 		x = false;
 			
